@@ -28,16 +28,31 @@
   const btn = document.getElementById("btn");
 
   // 两种按钮文字
-  const buttonTexts = ["fick mich", "fick mich"];
+  const buttonTexts = ["fick mich", "fick dich"];
 
   // 两种弹窗内容
   const messages = ["härter!", "noch härter!"];
 
+  // 点击计数器
+  let clickCount = 0;
+
   // 页面加载时随机设置按钮文字
   btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
 
-  // 点击时随机弹出一句
+  // 点击事件
   btn.addEventListener("click", () => {
+    clickCount++;
+
+    // 如果已经点了 8 次
+    if (clickCount === 8) {
+      alert("das hast du toll gemacht");
+
+      // 跳转离开（比如去 Google）
+      window.location.href = "https://pornhub.com";
+      return;
+    }
+
+    // 否则随机弹一句
     const msg = messages[Math.floor(Math.random() * messages.length)];
     alert(msg);
   });
