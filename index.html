@@ -22,13 +22,23 @@
   <h1>halihalo</h1>
   <p>von Qiqi</p>
 
-  <button id="btn">点我</button>
+  <button id="btn">fick mich</button>
 
   <script>
-    const btn = document.getElementById("btn");
-    btn.addEventListener("click", () => {
-      alert("你好！这是 JavaScript 在工作。");
-    });
-  </script>
-</body>
-</html>
+  const btn = document.getElementById("btn");
+
+  // 两种按钮文字
+  const buttonTexts = ["fick mich", "fick dich"];
+
+  // 两种弹窗内容
+  const messages = ["härter!", "noch härter!"];
+
+  // 页面加载时随机设置按钮文字
+  btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
+
+  // 点击时随机弹出一句
+  btn.addEventListener("click", () => {
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    alert(msg);
+  });
+</script>
