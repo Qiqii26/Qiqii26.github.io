@@ -16,44 +16,64 @@
     h1 { font-size: 50px; }
     button { font-size: 18px; padding: 10px 16px; }
   </style>
+
+  <!-- 把页面“变成图片”用的库 -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
 <body>
-  <h1>Fick das↓ding gerne!</h1>
-  <p>von Qiqi</p>
+  <h1>Fick das↓ding hier!</h1>
+  <p>von qiqi</p>
 
   <button id="btn">fick mich</button>
 
- <script>
-  const btn = document.getElementById("btn");
+  <script>
+    const btn = document.getElementById("btn");
 
-  // 两种按钮文字
-  const buttonTexts = ["fick mich", "fick mich"];
+    // 按钮文字（你可以随便加）
+    const buttonTexts = ["fick mich", "fick dich"];
 
-  // 两种弹窗内容
-  const messages = ["härter!", "noch härter!"];
+    // 点击弹窗（你可以随便加）
+    const messages = ["härter!", "noch härter!"];
 
-  // 点击计数器
-  let clickCount = 0;
+    // 计数
+    let clickCount = 0;
 
-  // 页面加载时随机设置按钮文字
-  btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
+    // 刷新页面时随机按钮文字
+    btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
 
-  // 点击事件
-  btn.addEventListener("click", () => {
-    clickCount++;
+    async function freezePageToImage() {
+      // 可选：截图前把按钮隐藏（不想出现在“最终图片”里）
+      btn.style.display = "none";
 
-    // 如果已经点了 8 次
-    if (clickCount === 8) {
-      alert("das hast du toll gemacht");
+      // 把整个页面渲染成一张图（更清晰用 scale:2）
+      const canvas = await html2canvas(document.body, { scale: 2 });
+      const dataUrl = canvas.toDataURL("image/png");
 
-      // 跳转离开（比如去 Google）
-      window.location.href = "https://pornhub.com";
-      return;
+      // 用生成的图片替换整个页面（页面“冻结”）
+      document.body.innerHTML = "";
+      const img = new Image();
+      img.src = dataUrl;
+      img.alt = "Frozen page";
+      img.style.width = "100%";
+      img.style.height = "auto";
+      document.body.appendChild(img);
     }
 
-    // 否则随机弹一句
-    const msg = messages[Math.floor(Math.random() * messages.length)];
-    alert(msg);
-  });
-</script>
+    btn.addEventListener("click", async () => {
+      clickCount++;
+
+      // 第 8 次：夸奖 + 冻结成图片
+      if (clickCount === 8) {
+        alert("das hast du aber toll gemacht!");
+        await freezePageToImage();
+        return;
+      }
+
+      // 前 1-7 次：随机一句
+      const msg = messages[Math.floor(Math.random() * messages.length)];
+      alert(msg);
+    });
+  </script>
+</body>
+</html>
