@@ -1,11 +1,34 @@
-<h1>Halihalo</h1>
-<p>von Qiqii</p>
-body {
-  background: white;
-  color: black;
-  text-align: center;
-}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qiqi的网站</title>
 
-h1 {
-  font-size: 50px;
-}
+  <style>
+    body {
+      background: white;
+      color: black;
+      text-align: center;
+      font-family: system-ui, -apple-system, Arial;
+      padding-top: 60px;
+    }
+    h1 { font-size: 50px; }
+    button { font-size: 18px; padding: 10px 16px; }
+  </style>
+</head>
+
+<body>
+  <h1>halihalo</h1>
+  <p>von Qiqi</p>
+
+  <button id="btn">点我</button>
+
+  <script>
+    const btn = document.getElementById("btn");
+    btn.addEventListener("click", () => {
+      alert("你好！这是 JavaScript 在工作。");
+    });
+  </script>
+</body>
+</html>
