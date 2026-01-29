@@ -76,9 +76,7 @@
 
   <button id="btn">点击我</button>
 
-  <!-- ✅ 这张图会在第5次点击出现，并且“图片本身就是一个链接” -->
-  <!-- 1) href= 点图会跳到哪里（你自己改） -->
-  <!-- 2) src= 图片地址（你自己改） -->
+  
   <a id="flashLink" href="https://www.google.com" target="_blank" rel="noopener">
     <img id="flashImage" src="IMG_1660.jpeg" alt="flash" />
   </a>
@@ -91,9 +89,9 @@
     const buttonTexts = ["fick mich", "fick mich"];
     const messages = ["härter!", "noch härter!"];
 
-    const LIMIT = 5;                          // 点几次触发
-    const REDIRECT_URL = "https://google.com"; // 最后自动跳转到哪里
-    const FLASH_SECONDS = 3;                  // 闪烁几秒后跳转
+    const LIMIT = 5;                          
+    const REDIRECT_URL = "https://google.com"; 
+    const FLASH_SECONDS = 3;                  
 
     let clickCount = 0;
 
@@ -104,11 +102,11 @@
       // 背景彩虹闪
       document.body.classList.add("flash-bg");
 
-      // 让页面文字闪烁（你要“所有文字”，就把常见元素都选上）
+      
       document.querySelectorAll("h1, p, button")
         .forEach(el => el.classList.add("flash-text"));
 
-      // 显示图片（图片本身可点击，因为外面包了 <a>）
+      // 显示图片（图片本身可点
       flashLink.style.display = "block";
 
       // 几秒后自动跳转
