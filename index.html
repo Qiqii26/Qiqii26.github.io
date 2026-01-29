@@ -12,57 +12,124 @@
       text-align: center;
       font-family: system-ui, -apple-system, Arial;
       padding-top: 60px;
+      transition: background 0.2s linear;
     }
+
     h1 { font-size: 50px; margin-top: 100px; }
-    button { font-size: 100px; padding: 10px 16px; }
+    p  { font-size: 150px; margin-top: 60px; }
+
+    button {
+      font-size: 60px;
+      padding: 10px 16px;
+      margin-top: 40px;
+    }
+
+    /* 彩虹背景动画 */
+    @keyframes rainbowBG {
+      0% { background: red; }
+      16% { background: orange; }
+      33% { background: yellow; }
+      50% { background: green; }
+      66% { background: cyan; }
+      83% { background: blue; }
+      100% { background: purple; }
+    }
+
+    /* 文字闪烁 */
+    @keyframes blinkText {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .flash-bg {
+      animation: rainbowBG 0.35s infinite;
+    }
+
+    .flash-text {
+      animation: blinkText 0.18s infinite;
+    }
+
+    /* 中央弹出图片（默认隐藏） */
+    #flashLink {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+      text-decoration: none;
+    }
+
+    #flashImage {
+      max-width: 80vw;
+      max-height: 70vh;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    }
   </style>
 </head>
 
 <body>
-  <!-- 这里改大标题 -->
   <h1>Fick das↓ding hier!</h1>
-
-  <!-- 这里改小文字 -->
   <p>von qiqi</p>
 
-  <!-- 这里是按钮 -->
   <button id="btn">点击我</button>
+
+  <!-- ✅ 这张图会在第5次点击出现，并且“图片本身就是一个链接” -->
+  <!-- 1) href= 点图会跳到哪里（你自己改） -->
+  <!-- 2) src= 图片地址（你自己改） -->
+  <a id="flashLink" href="https://www.google.com" target="_blank" rel="noopener">
+    <img id="flashImage" src="https://via.placeholder.com/800x500.png?text=Your+Image" alt="flash" />
+  </a>
 
   <script>
     const btn = document.getElementById("btn");
+    const flashLink = document.getElementById("flashLink");
 
-    // ✅ 这里改“按钮会随机出现的文字”
+    // ✅ 你可以改这里
     const buttonTexts = ["fick mich", "fick mich"];
-
-    // ✅ 这里改“每次点击弹出的内容”
     const messages = ["härter!", "noch härter!"];
 
-    // ✅ 点到第几次跳转（你要 8 次）
-    const LIMIT = 6;
-
-    // ✅ 跳转到哪里（你要 Google）
-    const REDIRECT_URL = "https://www.pornhub.com";
+    const LIMIT = 5;                          // 点几次触发
+    const REDIRECT_URL = "https://google.com"; // 最后自动跳转到哪里
+    const FLASH_SECONDS = 3;                  // 闪烁几秒后跳转
 
     let clickCount = 0;
 
-    // 页面加载时随机按钮文字
+    // 刷新时随机按钮文字
     btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
+
+    function startCrazyMode() {
+      // 背景彩虹闪
+      document.body.classList.add("flash-bg");
+
+      // 让页面文字闪烁（你要“所有文字”，就把常见元素都选上）
+      document.querySelectorAll("h1, p, button")
+        .forEach(el => el.classList.add("flash-text"));
+
+      // 显示图片（图片本身可点击，因为外面包了 <a>）
+      flashLink.style.display = "block";
+
+      // 几秒后自动跳转
+      setTimeout(() => {
+        window.location.href = REDIRECT_URL;
+      }, FLASH_SECONDS * 1000);
+    }
 
     btn.addEventListener("click", () => {
       clickCount++;
 
-      // 第 8 次：提示 + 跳转
       if (clickCount >= LIMIT) {
         alert("das hast du aber toll gemacht!");
-        window.location.href = REDIRECT_URL;
+        startCrazyMode();
         return;
       }
 
-      // 前 1-7 次：随机弹一句
-      const msg = messages[Math.floor(Math.random() * messages.length)];
-      alert(msg);
+      // 前面次数：随机弹窗
+      alert(messages[Math.floor(Math.random() * messages.length)]);
 
-      // 每次点击后也可以重新随机按钮文字（可选）
+      // 每次点完随机换按钮文字（可选）
       btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
     });
   </script>
