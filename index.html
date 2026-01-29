@@ -7,115 +7,140 @@
 
   <style>
     body {
+      margin: 0;
       background: white;
       color: black;
       text-align: center;
       font-family: system-ui, -apple-system, Arial;
       padding-top: 60px;
-      transition: background 0.2s linear;
+      overflow: hidden; /* 防止闪屏时出现滚动条 */
     }
 
     h1 { font-size: 50px; margin-top: 100px; }
-    pfeil { font-size: 50px; margin-top: 80px; }
+    p  { font-size: 20px; margin-top: 10px; }
+
     button {
-      font-size: 160px;
-      padding: 10px 16px;
+      font-size: 60px;
+      padding: 12px 18px;
       margin-top: 40px;
+      border-radius: 14px;
+      border: 0;
     }
-    p  { font-size: 30px; margin-top: -30px; }
 
-    
-
-    /* 彩虹背景动画 */
+    /* ====== 闪烁动画：更快版本 ====== */
     @keyframes rainbowBG {
-      0% { background: red; }
-      16% { background: orange; }
-      33% { background: yellow; }
-      50% { background: green; }
-      66% { background: cyan; }
-      83% { background: blue; }
-      100% { background: purple; }
+      0%   { background: red; }
+      14%  { background: orange; }
+      28%  { background: yellow; }
+      42%  { background: lime; }
+      57%  { background: cyan; }
+      71%  { background: blue; }
+      85%  { background: magenta; }
+      100% { background: red; }
     }
 
-    /* 文字闪烁 */
     @keyframes blinkText {
       0% { opacity: 1; }
       50% { opacity: 0; }
       100% { opacity: 1; }
     }
 
+    /* 图片闪（更“抽搐”的那种） */
+    @keyframes flickerImg {
+      0%   { opacity: 1; transform: scale(1); }
+      10%  { opacity: 0.2; transform: scale(1.02); }
+      20%  { opacity: 1; transform: scale(1); }
+      30%  { opacity: 0.1; transform: scale(1.03); }
+      40%  { opacity: 1; transform: scale(1); }
+      60%  { opacity: 0.15; transform: scale(1.02); }
+      80%  { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.3; transform: scale(1.01); }
+    }
+
     .flash-bg {
-      animation: rainbowBG 0.35s infinite;
+      animation: rainbowBG 0.16s infinite; /* 越小越快 */
     }
 
     .flash-text {
-      animation: blinkText 0.18s infinite;
+      animation: blinkText 0.08s infinite; /* 越小越快 */
     }
 
-    /* 中央弹出图片（默认隐藏） */
-    #flashLink {
-      display: none;
+    /* ====== 全屏图片覆盖层 ====== */
+    #overlay {
+      display: none;              /* 默认隐藏 */
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      inset: 0;                   /* top/right/bottom/left 全0 */
       z-index: 9999;
-      text-decoration: none;
     }
 
-    #flashImage {
-      max-width: 160vw;
-      max-height: 160vh;
-      border-radius: 50px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.35);
+    #overlay img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;          /* 关键：铺满并裁切 */
+      animation: flickerImg 0.07s infinite; /* 图片闪烁速度 */
+    }
+
+    /* 可选：让覆盖层上再加一层颜色闪烁（更疯狂） */
+    #overlay::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.35;
+      animation: rainbowBG 0.12s infinite;
     }
   </style>
 </head>
 
 <body>
-  <h1>Fick das Ding hier!</h1>
-  <pfeil>↓</pfeil>
+  <h1>Fick dasding hier!</h1>
   <p>von qiqi</p>
 
   <button id="btn">点击我</button>
 
-  
-  <a id="flashLink" href="https://www.google.com" target="_blank" rel="noopener">
-    <img id="flashImage" src="IMG_1660.jpeg" alt="flash" />
-  </a>
+  <!-- 全屏覆盖层：把 src 改成你仓库里的图片文件名 -->
+  <div id="overlay">
+    <img id="overlayImg" src="miyamoto-musashi-5k-38....jpg" alt="overlay" />
+  </div>
 
   <script>
     const btn = document.getElementById("btn");
-    const flashLink = document.getElementById("flashLink");
+    const overlay = document.getElementById("overlay");
 
-    // ✅ 你可以改这里
-    const buttonTexts = ["fick mich", "fick mich"];
+    // 你想要的随机按钮文字/弹窗
+    const buttonTexts = ["fick mich", "fick dich"];
     const messages = ["härter!", "noch härter!"];
 
-    const LIMIT = 5;                          
-    const REDIRECT_URL = "https://pornhub.com"; 
-    const FLASH_SECONDS = 5;                  
+    // 点几次触发
+    const LIMIT = 5;
+
+    // 最后跳转到哪里（自己改）
+    const REDIRECT_URL = "https://www.google.com";
+
+    // 闪烁持续多久再跳（毫秒）
+    const FLASH_MS = 2500;
 
     let clickCount = 0;
 
-    // 刷新时随机按钮文字
+    // 初始按钮文字
     btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
 
     function startCrazyMode() {
       // 背景彩虹闪
       document.body.classList.add("flash-bg");
 
-      
+      // 文字闪（标题/小字/按钮都闪）
       document.querySelectorAll("h1, p, button")
         .forEach(el => el.classList.add("flash-text"));
 
-      // 显示图片（图片本身可点
-      flashLink.style.display = "block";
+      // 显示全屏图片覆盖
+      overlay.style.display = "block";
 
-      // 几秒后自动跳转
+      // 到时间后跳转
       setTimeout(() => {
         window.location.href = REDIRECT_URL;
-      }, FLASH_SECONDS * 1000);
+      }, FLASH_MS);
     }
 
     btn.addEventListener("click", () => {
@@ -127,10 +152,7 @@
         return;
       }
 
-      // 前面次数：随机弹窗
       alert(messages[Math.floor(Math.random() * messages.length)]);
-
-      // 每次点完随机换按钮文字（可选）
       btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
     });
   </script>
