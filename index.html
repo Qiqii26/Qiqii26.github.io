@@ -13,66 +13,57 @@
       font-family: system-ui, -apple-system, Arial;
       padding-top: 60px;
     }
-    h1 { font-size: 50px; }
+    h1 { font-size: 50px;margin-top: 40px; }
     button { font-size: 18px; padding: 10px 16px; }
   </style>
-
-  <!-- 把页面“变成图片”用的库 -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
 <body>
+  <!-- 这里改大标题 -->
   <h1>Fick das↓ding hier!</h1>
+
+  <!-- 这里改小文字 -->
   <p>von qiqi</p>
 
-  <button id="btn">fick mich</button>
+  <!-- 这里是按钮 -->
+  <button id="btn">点击我</button>
 
   <script>
     const btn = document.getElementById("btn");
 
-    // 按钮文字（你可以随便加）
+    // ✅ 这里改“按钮会随机出现的文字”
     const buttonTexts = ["fick mich", "fick dich"];
 
-    // 点击弹窗（你可以随便加）
+    // ✅ 这里改“每次点击弹出的内容”
     const messages = ["härter!", "noch härter!"];
 
-    // 计数
+    // ✅ 点到第几次跳转（你要 8 次）
+    const LIMIT = 8;
+
+    // ✅ 跳转到哪里（你要 Google）
+    const REDIRECT_URL = "https://www.google.com";
+
     let clickCount = 0;
 
-    // 刷新页面时随机按钮文字
+    // 页面加载时随机按钮文字
     btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
 
-    async function freezePageToImage() {
-      // 可选：截图前把按钮隐藏（不想出现在“最终图片”里）
-      btn.style.display = "none";
-
-      // 把整个页面渲染成一张图（更清晰用 scale:2）
-      const canvas = await html2canvas(document.body, { scale: 2 });
-      const dataUrl = canvas.toDataURL("image/png");
-
-      // 用生成的图片替换整个页面（页面“冻结”）
-      document.body.innerHTML = "";
-      const img = new Image();
-      img.src = dataUrl;
-      img.alt = "Frozen page";
-      img.style.width = "100%";
-      img.style.height = "auto";
-      document.body.appendChild(img);
-    }
-
-    btn.addEventListener("click", async () => {
+    btn.addEventListener("click", () => {
       clickCount++;
 
-      // 第 8 次：夸奖 + 冻结成图片
-      if (clickCount === 8) {
+      // 第 8 次：提示 + 跳转
+      if (clickCount >= LIMIT) {
         alert("das hast du aber toll gemacht!");
-        await freezePageToImage();
+        window.location.href = REDIRECT_URL;
         return;
       }
 
-      // 前 1-7 次：随机一句
+      // 前 1-7 次：随机弹一句
       const msg = messages[Math.floor(Math.random() * messages.length)];
       alert(msg);
+
+      // 每次点击后也可以重新随机按钮文字（可选）
+      btn.textContent = buttonTexts[Math.floor(Math.random() * buttonTexts.length)];
     });
   </script>
 </body>
