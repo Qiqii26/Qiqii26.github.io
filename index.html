@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>荒野回声 3D 开放世界</title>
+    <!--
+      本页面是一个简单的 3D 开放世界冒险游戏示例。
+      它依赖于 Three.js 的最新版本（截至 2026 年）。
+      我们使用模块化的方式从 CDN 加载 three.js 及其附加控件。
+
+      如 Discover Three.js 文档所述，可以通过 CDN 加载模块文件
+      并在 JavaScript 中使用 import 语句【516051025726045†L143-L159】。
+    -->
+    <style>
+      :root {
+        --hud-bg: rgba(0, 0, 0, 0.5);
+        --hud-text: #fff;
+        --hud-padding: 10px;
+      }
+      html, body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: sans-serif;
+        background: #000;
+      }
+      #overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.85);
+        color: #fff;
+        z-index: 2;
+      }
+      #startBtn {
+        background: #48a0ff;
+        color: #fff;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      #instructions {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        padding: var(--hud-padding);
+        background: var(--hud-bg);
+        color: var(--hud-text);
+        font-size: 0.85rem;
+        border-radius: 6px;
+        z-index: 1;
+      }
+      #mission {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: var(--hud-padding);
+        background: var(--hud-bg);
+        color: var(--hud-text);
+        font-size: 0.95rem;
+        border-radius: 6px;
+        z-index: 1;
+        max-width: 280px;
+        line-height: 1.4;
+      }
+      #crosshair {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        margin-top: -4px;
+        margin-left: -4px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.75);
+        z-index: 1;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="overlay">
+      <h1>荒野回声 3D</h1>
+      <p>欢迎来到 3D 开放世界冒险游戏的试验场！点击下方按钮开始冒险。\
+      您将使用键盘 WASD 键和鼠标控制角色，收集星核碎片并探索环境。</p>
+      <button id="startBtn">开始游戏</button>
+      <p style="font-size:0.8rem;margin-top:10px;">按下按钮后，浏览器会请求锁定鼠标指针。\
+      您可以按 ESC 键解除锁定并暂停游戏。</p>
+    </div>
+    <div id="mission" style="display:none;"></div>
+    <div id="instructions" style="display:none;">
+      <div><strong>W/A/S/D：</strong>前后左右移动</div>
+      <div><strong>鼠标：</strong>控制视角</div>
+      <div><strong>Space：</strong>跳跃</div>
+      <div><strong>Shift：</strong>奔跑</div>
+      <div><strong>E：</strong>拾取星核</div>
+    </div>
+    <div id="crosshair" style="display:none;"></div>
+    <!-- 加载主逻辑脚本 -->
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
